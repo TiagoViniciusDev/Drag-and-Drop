@@ -8,19 +8,51 @@
     <title>Drag and Drop</title>
 </head>
 <body>
-    <div class="main">
-        <div class="column">
-            <div class="item" draggable="true">CARD 01</div>
-            <div class="item" draggable="true">CARD 02</div>
+    <main class="kanban">
+        <div class="kanban-column" data-id="1">
+            <div class="kanban-title">
+                <h2>Pendente</h2>
+                <button class="add-card"><i class="fa-solid fa-plus"></i></button>
+            </div>
+            <div class="kanban-cards">
+                <div class="kanban-card" draggable="true">
+                    <div class="badge medium">Média prioridade</div>
+                    <p>CARD 01</p>
+                </div>
+                <div class="kanban-card" draggable="true">
+                    <div class="badge low">Baixa prioridade</div>
+                    <p>CARD 02</p>
+                </div>
+            </div>
         </div>
-        <div class="column">
-            <div class="item" draggable="true">CARD 03</div>
-            <div class="item" draggable="true">CARD 04</div>
+
+        <div class="kanban-column" data-id="2">
+            <div class="kanban-title">
+                <h2>Em Progresso</h2>
+                <button class="add-card"><i class="fa-solid fa-plus"></i></button>
+            </div>
+            <div class="kanban-cards">
+                <div class="kanban-card" draggable="true">
+                    <div class="badge high">Alta prioridade</div>
+                    <p>CARD 03</p>
+                </div>
+            </div>
         </div>
-        <div class="column">
-            <div class="item" draggable="true">CARD 05</div>
-            <div class="item" draggable="true">CARD 06</div>
+
+        <div class="kanban-column" data-id="3">
+            <div class="kanban-title">
+                <h2>Concluído</h2>
+                <button class="add-card"><i class="fa-solid fa-plus"></i></button>
+            </div>
+            <div class="kanban-cards">
+                <div class="kanban-card" draggable="true">
+                    <div class="badge low">Baixa prioridade</div>
+                    <p>CARD 04</p>
+                </div>
+            </div>
         </div>
-    </div>
+
+        <!-- Mais Cards -->
+    </main>
 </body>
 </html>

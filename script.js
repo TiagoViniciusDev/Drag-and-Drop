@@ -1,36 +1,48 @@
-const columns = document.querySelectorAll(".column"); //Pega todas as colunas
+// Seleciona todos os elementos com a classe '.kanban-card' e adiciona eventos a cada um deles
+document.querySelectorAll(".kanban-card").forEach((card) => {
+  // Evento disparado quando começa a arrastar um card
+  card.addEventListener("dragstart", (e) => {
+    // Adiciona a classe 'dragging' ao card que está sendo arrastado
+    e.currentTarget.classList.add("dragging");
+  });
 
-document.addEventListener("dragstart", (e) => { //Evendo que adiciona a classe "dragstart" ao arrastar elemetento
-  e.target.classList.add("dragging");
-});
-
-document.addEventListener("dragend", (e) => { //Evento que remove a classe "dragstart" ao soltar elemetento
-  e.target.classList.remove("dragging");
-});
-
-columns.forEach((item) => { //Percorrendo as colunas
-  item.addEventListener("dragover", (e) => { //O evento "dragover" permite que você solte o elemento aqui //O evento foi adicionado a todas as colunas pelo forEach
-    const dragging = document.querySelector(".dragging"); //Pega o item que está sendo arrastado
-    const applyAfter = getNewPosition(item, e.clientY); //Chama função //Passa a coluna como parametro e a posição no eixo Y da coluna
-
-    if (applyAfter) {
-      applyAfter.insertAdjacentElement("afterend", dragging); //Se a posição Y do item arrastado for maior que o item estatico ele será posto em baixo/depois
-    } else {
-      item.prepend(dragging); //Se não ele será posto em cima/antes
-    }
+  // Evento disparado quando termina de arrastar o card
+  card.addEventListener("dragend", (e) => {
+    // Remove a classe 'dragging' quando o card é solto
+    e.currentTarget.classList.remove("dragging");
   });
 });
 
-function getNewPosition(column, posY) {
-  const cards = column.querySelectorAll(".item:not(.dragging)"); //Pegando todos os itens que não estão sendo arrastados
-  let result;
+// Seleciona todos os elementos com a classe '.kanban-cards' (as colunas) e adiciona eventos a cada um deles
+document.querySelectorAll(".kanban-column").forEach((column) => {
+  const columnCards = column.querySelector(".kanban-cards");
 
-  for (let refer_card of cards) { //Loop executado em todos os itens que não estão sendo arrastados
-    const box = refer_card.getBoundingClientRect(); //O método "getBoundingClientRect" retorna a posição do elemento na tela (X e Y) bem como suas dimensões (Width e Height)
-    const boxCenterY = box.y + box.height / 2; //Pega a posição do item no eixo Y e soma com metade da sua altura obtendo assim o centro no eixo Y
+  // Evento disparado quando um card arrastado passa sobre uma coluna (drag over)
+  columnCards.addEventListener("dragover", (e) => {
+    // Previne o comportamento padrão para permitir o "drop" (soltar) do card
+    e.preventDefault();
+    // Adiciona a classe 'cards-hover' para mostrar que a coluna pode receber o card
+    columnCards.classList.add("cards-hover");
+  });
 
-    if (posY >= boxCenterY) result = refer_card; //Se a posição no eixo Y do item arrastado for maior ou igual ao centro de algum elemento não arrastado os dados desse elemento serão retornados
-  }
+  // Evento disparado quando o card sai da área da coluna (quando o card é arrastado para fora)
+  columnCards.addEventListener("dragleave", (e) => {
+    // Remove a classe 'cards-hover' quando o card deixa de estar sobre a coluna
+    columnCards.classList.remove("cards-hover");
+  });
 
-  return result;
-}
+  // Evento disparado quando o card é solto (drop) dentro da coluna
+  columnCards.addEventListener("drop", (e) => {
+    // Remove a classe 'cards-hover', já que o card foi solto
+    columnCards.classList.remove("cards-hover");
+
+    // Seleciona o card que está sendo arrastado (que tem a classe 'dragging')
+    const dragCard = document.querySelector(".kanban-card.dragging");
+
+    // Verifica se o card não está sendo arrastado para a própria coluna
+    if (e.currentTarget !== dragCard.parentElement) {
+      // Move o card arrastado para a coluna onde foi solto
+      columnCards.appendChild(dragCard);
+    }
+  });
+});
